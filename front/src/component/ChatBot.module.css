@@ -1,0 +1,99 @@
+.button {
+  display: inline-block;
+  padding: 5px 20px;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.button:hover {
+  background-color: #218838;
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3);
+}
+.button:active {
+  background-color: #218838;
+  border-color: #218838;
+}
+.left {
+  flex: 1;
+  width: 500px;
+  height: 500px;
+  background-image: url("./Images/left.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-top: 5%;
+}
+.mid {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  width: 500px;
+  height: 500px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 50px;
+  overflow: auto;
+  text-align: right;
+}
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding-right: 10px;
+}
+
+.message {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.input-container {
+  position: absolute;
+  left: 50%;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 35%;
+  width: 23%;
+}
+
+.right {
+  flex: 1;
+  width: 500px;
+  height: 500px;
+  background-image: url("./Images/right.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-top: 5%;
+}
+.wrap {
+  display: flex;
+}
+.logo {
+  margin-left: 5%;
+}
+.body {
+  margin-top: 0;
+}
+.question {
+  display: inline-block;
+  margin-left: 10%;
+}
