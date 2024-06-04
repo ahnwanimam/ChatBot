@@ -15,7 +15,7 @@ export default function ChatBot( ) {
   const handleSendMessage = () => {
     if (input.trim() !== '') {
       setMessages([...messages, "\n나: " + input]);
-      setInput('');
+      inputRef.current.value = null;
     }
   };
 
