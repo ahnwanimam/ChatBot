@@ -69,8 +69,27 @@ public class ChatController {
     }
 
     @PostMapping("/questions")
-    public ResponseEntity addQuestion(@RequestBody QuestionDto request) {
+    public ResponseEntity addQuestion(@RequestBody QuestionAddDto request) {
         int add = chatService.addQuestion(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(add);
+    }
+
+    @GetMapping("/chatlogs")
+    ArrayList<ChatLog> findAllChatLog() {
+        return chatService.findAllChatLog();
+    }
+
+    @GetMapping("/chatlogs/{mem_id}")
+    ResponseEntity<ChatLogDto> findChatLogById(@PathVariable String mem_id) {
+        ChatLog chatlog = chatService.findChatLogById(mem_id);
+        return ResponseEntity.ok()
+                .body(new ChatLogDto(chatlog));
+    }
+    @PostMapping("/chatlogs")
+    public ResponseEntity addChatLog(@RequestBody ChatLogAddDto request) {
+        int add = chatService.addChatLog(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(add);

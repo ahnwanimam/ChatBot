@@ -1,10 +1,33 @@
-import styles from './ChatBot.module.css';
-import React, { useRef, useState } from 'react';
+import styles from './LoginChatBot.module.css';
+import React, { useRef, useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const saveMessages = messages.toString();
+
+  const [chatlogs, setChatlogs] = useState({
+    "id" : 0,
+    "mem_id" : null,
+    "title" : null,
+    "con" : null,
+    "reg_dtm" : null
+  });
+
+  const [Mem, setMem] = useState({
+    "mem_id": null,
+    "mem_pw": null,
+    "mem_nm": null,
+    "mem_mail": null,
+
+});
+
+useEffect( () => {
+  fetch(`/member`)
+  .then( res => {return res.json() })
+  .then( data => {console.log(data); setMem(data)});
+}, []);
 
   const inputRef = useRef(0);
 
@@ -14,7 +37,7 @@ export default function ChatBot( ) {
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      setMessages([...messages, "\n나: " + input]);
+      setMessages([...messages, "나: " + input]);
       inputRef.current.value = null;
     }
   };
@@ -25,9 +48,53 @@ export default function ChatBot( ) {
     window.open(url, "_blank", "width=400, height=400, top=150, left=500");
   }
 
+  function removeMessage () {
+    setMessages([]);
+  }
+
+  function saveMessage (event) {
+    event.preventDefault();
+
+
+    const bodyString = JSON.stringify({
+      "mem_id" : Mem.mem_id,
+      "title" : messages[0].replace('나: ', ''),
+      "con" : saveMessages
+    })
+
+    fetch(`/chatlogs`,
+    {
+          method : "POST",
+          headers : {
+            'Content-Type' : "application/json",
+          },
+          body : bodyString
+    }).then(res => {
+      console.log(res);
+      if(res.ok) {
+        console.log(res);
+        alert("대화를 저장하였습니다.");
+        setMessages([]);
+        fetch(`/chatlogs/${Mem.mem_id}`)
+        .then( res => {return res.json() })
+        .then( data => {console.log(data); setChatlogs(data)});
+      } else {
+        alert('저장 실패');
+      }
+    }
+    ).catch(() => {
+      console.log('error');
+    })
+
+  }
+
     return ( 
     <body className={styles.body}>
-      <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <Link to={"/LoginMain"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <div className={styles.headBtn}>
+          <button className={styles.button} id={styles.saveBtn} onClick={saveMessage}>저장</button>
+          <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
+      </div>
       <div className={styles.wrap}>
         <div className={styles.left}>
         </div>

@@ -16,6 +16,7 @@ export default function ChatBot( ) {
     if (input.trim() !== '') {
       setMessages([...messages, "\n나: " + input]);
       inputRef.current.value = null;
+      setInput('');
     }
   };
 
@@ -25,9 +26,16 @@ export default function ChatBot( ) {
     window.open(url, "_blank", "width=400, height=400, top=150, left=500");
   }
 
+  function removeMessage () {
+    setMessages([]);
+  }
+
     return ( 
     <body className={styles.body}>
       <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <div className={styles.headBtn}>
+          <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
+      </div>
       <div className={styles.wrap}>
         <div className={styles.left}>
         </div>

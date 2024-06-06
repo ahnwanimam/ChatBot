@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class QuestionDto {
+public class QuestionAddDto {
     private int id;
     private String con;
     private int category;
