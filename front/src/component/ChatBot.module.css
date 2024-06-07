@@ -97,3 +97,7 @@ input {
   display: inline-block;
   margin-left: 10%;
 }
+.headBtn {
+  position: absolute;
+  left: 59%;
+}
