@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Mapper
 public interface ChatMapper {
@@ -32,4 +33,6 @@ public interface ChatMapper {
     @Insert("insert into chatlog (mem_id, title, con) values (#{mem_id}, #{title}, #{con})")
     int addChatLog(ChatLog chatLog);
 
+    @Select("select * from chatlog where id =#{id} ")
+    ChatLog findByChatLogId(int id);
 }
