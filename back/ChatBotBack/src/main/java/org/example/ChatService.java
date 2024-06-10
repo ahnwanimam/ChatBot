@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -43,12 +44,16 @@ public class ChatService {
         return chatMapper.findAllChatLog();
     }
 
-    ArrayList<ChatLog> findChatLogById(String mem_id) {
+    ArrayList<ChatLog> findChatLogByMemId(String mem_id) {
         return chatMapper.findByMemId(mem_id);
     }
 
     public int addChatLog(ChatLogAddDto request) {
         return chatMapper.addChatLog(request.toEntity());
+    }
+
+    ChatLog findChatLogById(int id) {
+        return chatMapper.findByChatLogId(id);
     }
 
 }
