@@ -7,21 +7,9 @@ export default function ChatBot( ) {
   const [input, setInput] = useState('');
   const saveMessages = messages.toString();
 
-  const [chatlogs, setChatlogs] = useState({
-    "id" : 0,
-    "mem_id" : null,
-    "title" : null,
-    "con" : null,
-    "reg_dtm" : null
-  });
+  const [chatlogs, setChatlogs] = useState([]);
 
-  const [Mem, setMem] = useState({
-    "mem_id": null,
-    "mem_pw": null,
-    "mem_nm": null,
-    "mem_mail": null,
-
-});
+  const [Mem, setMem] = useState([]);
 
 
 useEffect( () => {
@@ -34,7 +22,8 @@ useEffect( ()=>  {
   fetch(`/chatlogs/${Mem.mem_id}`) 
     .then( res => { return res.json() } ) 
     .then( data => {console.log(data); setChatlogs(data)});
-}, []) ;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [Mem]) ;
 
   const inputRef = useRef(0);
 
@@ -81,7 +70,6 @@ useEffect( ()=>  {
   function saveMessage (event) {
     event.preventDefault();
 
-
     const bodyString = JSON.stringify({
       "mem_id" : Mem.mem_id,
       "title" : messages[0].replace('나: ', ''),
@@ -125,12 +113,12 @@ useEffect( ()=>  {
         <div className={styles.left}>
           <table>
 						<tbody>
-            {chatlogs.map( (chatlog) => (
-                    <tr key = {chatlog.id}> 
-                    <td>{chatlog.id}. {chatlog.title}</td><td></td>
+            {chatlogs.map( (chatlog) => ( 
+                  <tr>
+                    <button onClick={() => window.open("ChatLog/" + (chatlog.id), "_blank", "width=400, height=400, top=150, left=500")}>{chatlog.id}. {chatlog.title}</button>
                     <br></br>
                     <br></br>
-                    </tr>
+                  </tr>
                   )
                 )
             }
