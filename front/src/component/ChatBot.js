@@ -48,6 +48,7 @@ export default function ChatBot( ) {
     setMessages([]);
   }
 
+<<<<<<< Updated upstream
     return ( 
     <body className={styles.body}>
       <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
@@ -62,6 +63,39 @@ export default function ChatBot( ) {
             {messages.map((msg, index) => (
             <div key={index} className="message">
               {msg}
+=======
+    return (
+        <div className={styles.body}>
+          <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+          <div className={styles.headBtn}>
+            <Link to={"/Login" }><button className={styles.button}>로그인하기</button></Link>
+            <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
+          </div>
+          <div className={styles.wrap}>
+            <div className={styles.left}></div>
+            <div className={styles.mid}>
+              <div className={styles.messages}>
+                {messages.map((msg, index) => (
+                    <div key={index} className={msg.startsWith("나:") ? styles.user : styles.bot}>
+                      {msg}
+                    </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.right}></div>
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+                type="text"
+                ref={inputRef}
+                onChange={handleInputChange}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="내용을 입력하세요."
+            />
+            <button className={styles.button} onClick={handleSendMessage}>전송</button>
+            <div className={styles.question}>
+              <button onClick={popUp} className={styles.button}>질문 요청</button>
+>>>>>>> Stashed changes
             </div>
             ))}
           </div>

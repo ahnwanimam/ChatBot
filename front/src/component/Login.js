@@ -30,7 +30,7 @@ export default function Login () {
         if(text === '로그인 실패') alert('아이디나 비밀번호를 확인하세요.')
         else if(text ==='로그인 성공!')  {
           alert('로그인 성공');
-          navigate("/LoginMain");
+          navigate("/LoginChatBot");
         }
       })
   }
@@ -44,7 +44,11 @@ export default function Login () {
         <h2>로그인</h2>
         아이디
         <div className={styles.inputGroup}>
+<<<<<<< Updated upstream
            <input
+=======
+         <input
+>>>>>>> Stashed changes
             type="text"
             ref = {idRef}
             required

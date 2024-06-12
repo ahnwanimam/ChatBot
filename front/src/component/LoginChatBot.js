@@ -1,6 +1,11 @@
 import styles from './LoginChatBot.module.css';
+<<<<<<< Updated upstream
 import React, { useRef, useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+=======
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+>>>>>>> Stashed changes
 
 export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
@@ -11,6 +16,16 @@ export default function ChatBot( ) {
 
   const [Mem, setMem] = useState([]);
 
+<<<<<<< Updated upstream
+=======
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`/member`)
+        .then(res => res.json())
+        .then(data => { console.log(data); setMem(data); });
+  }, []);
+>>>>>>> Stashed changes
 
 useEffect( () => {
   fetch(`/member`)
@@ -102,10 +117,32 @@ useEffect( ()=>  {
 
   }
 
+<<<<<<< Updated upstream
     return ( 
     <body className={styles.body}>
       <Link to={"/LoginMain"}><h1 className={styles.logo}>서경챗봇</h1></Link>
       <div className={styles.headBtn}>
+=======
+  function logout () {
+    fetch(`/logout`)
+    .then( res => {
+        if (res.ok) {
+            alert("로그아웃 되었습니다.");
+            navigate("/");
+        }
+    }
+)
+}
+
+  return (
+      <div className={styles.body}>
+        <h1 className={styles.logo}>서경챗봇</h1>
+        <div class={styles.Mem}>
+          <h4 class={styles.mem}>안녕하세요, {Mem.mem_nm}님!</h4>
+          <button onClick={logout} className={styles.logoutBtn}>로그아웃</button>
+        </div>
+        <div className={styles.headBtn}>
+>>>>>>> Stashed changes
           <button className={styles.button} id={styles.saveBtn} onClick={saveMessage}>저장</button>
           <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
       </div>

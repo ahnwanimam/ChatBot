@@ -96,5 +96,18 @@
   }
   .headBtn {
     position: absolute;
+<<<<<<< Updated upstream
     left: 52%;
   }
+=======
+    left: 52.5%;
+}
+.mem {
+    position: absolute;
+    left: 37%;
+}
+.logoutBtn {
+    position: absolute;
+    left: 37%;
+}
+>>>>>>> Stashed changes
