@@ -14,7 +14,6 @@
   margin-left: 5px;
   margin-right: 5px;
 }
-
 .button:hover {
   background-color: #218838;
 }
@@ -23,7 +22,6 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3);
 }
-
 .button:active {
   background-color: #218838;
   border-color: #218838;
@@ -121,5 +119,5 @@ input {
 
 .headBtn {
   position: absolute;
-  left: 52%;
+  left: 59%;
 }

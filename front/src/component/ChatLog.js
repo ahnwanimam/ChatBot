@@ -13,14 +13,15 @@ export default function ChatLog() {
     .then( data => {console.log(data); setChatlogs(data)});
 
   }, []);
-  
 
-  
+
+
 
   return (
     <div className="form-container">
         <h2>대화 내용</h2>
         <p>{chatlogs.con}</p>
+        <p>{chatlogs.conBot}</p>
     </div>
   );
 }

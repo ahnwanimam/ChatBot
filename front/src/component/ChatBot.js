@@ -50,7 +50,7 @@ export default function ChatBot( ) {
 
     return (
         <div className={styles.body}>
-          <Link to={"/LoginMain"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+          <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
           <div className={styles.headBtn}>
             <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
           </div>
