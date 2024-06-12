@@ -13,26 +13,30 @@
     transition: background-color 0.3s ease;
     margin-left: 5px;
     margin-right: 5px;
-  }
-  .button:hover {
+}
+
+.button:hover {
     background-color: #218838;
-  }
-  
-  .button:focus {
+}
+
+.button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3);
-  }
-  .button:active {
+}
+
+.button:active {
     background-color: #218838;
     border-color: #218838;
-  }
-  .left {
+}
+
+.left {
     flex: 1;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 8%;
-  }
-  .mid {
+}
+
+.mid {
     display: flex;
     flex-direction: column-reverse;
     justify-content: space-between;
@@ -44,35 +48,48 @@
     margin: 0 auto;
     margin-top: 50px;
     overflow: auto;
-    text-align: right;
-  }
-  .messages {
+    background-color: palegreen;
+}
+
+.messages {
     flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
     padding-right: 10px;
-  }
-  
-  .message {
+}
+
+.message {
     padding: 10px;
     border-bottom: 1px solid #eee;
-  }
-  
-  .input-container {
+}
+
+.user {
+    text-align: right;
+    background-color: #e0ffe0; /* 사용자 메시지 배경색 */
+    align-self: flex-end; /* 오른쪽 정렬 */
+}
+
+.bot {
+    text-align: left;
+    background-color: #f0f0f0; /* 챗봇 메시지 배경색 */
+    align-self: flex-start; /* 왼쪽 정렬 */
+}
+
+.input-container {
     position: absolute;
     left: 50%;
-  }
-  
-  input {
+}
+
+input {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-left: 35%;
     width: 23%;
-  }
-  
-  .right {
+}
+
+.right {
     flex: 1;
     width: 500px;
     height: 500px;
@@ -80,21 +97,26 @@
     background-repeat: no-repeat;
     background-position: center;
     padding-top: 5%;
-  }
-  .wrap {
+}
+
+.wrap {
     display: flex;
-  }
-  .logo {
+}
+
+.logo {
     margin-left: 5%;
-  }
-  .body {
+}
+
+.body {
     margin-top: 0;
-  }
-  .question {
+}
+
+.question {
     display: inline-block;
     margin-left: 10%;
-  }
-  .headBtn {
+}
+
+.headBtn {
     position: absolute;
     left: 52%;
-  }
+}
