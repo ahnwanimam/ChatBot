@@ -2,20 +2,20 @@ import styles from './ChatBot.module.css';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ChatBot() {
+export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const inputRef = useRef(null);
+  const inputRef = useRef(0);
 
-  function handleInputChange() {
+  function handleInputChange () {
     setInput(inputRef.current.value);
-  }
+  };
 
   const handleSendMessage = async () => {
     if (input.trim() !== '') {
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [...prevMessages, "\n나: " + input]);
+      setMessages((prevMessages) => [...prevMessages, `나: ${input}`]);
 
       // FastAPI 서버에 요청 보내기
       try {
@@ -26,10 +26,10 @@ export default function ChatBot() {
         const data = await response.json();
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
         // 챗봇 메시지 추가
-        setMessages((prevMessages) => [...prevMessages, "\n챗봇: " + botMessage]);
+        setMessages((prevMessages) => [...prevMessages, `챗봇: ${botMessage}`]);
       } catch (error) {
         console.error("Error fetching data: ", error);
-        setMessages((prevMessages) => [...prevMessages, "\n챗봇: Error fetching data"]);
+        setMessages((prevMessages) => [...prevMessages, '챗봇: Error fetching data']);
       }
 
       // 입력 필드 초기화
@@ -38,8 +38,8 @@ export default function ChatBot() {
     }
   };
 
-  function popUp() {
-    const url = "Question";
+  function popUp () {
+    const url = "Question"
     window.open(url, "_blank", "width=400, height=400, top=150, left=500");
   }
 
