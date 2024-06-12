@@ -14,15 +14,17 @@ public class ChatLog {
     private String mem_id;
     private String title;
     private String con;
+    private String conBot;
     private LocalDateTime reg_dtm;
 
 
     @Builder
-    ChatLog(int id, String mem_id, String title, String con, LocalDateTime reg_dtm) {
+    ChatLog(int id, String mem_id, String title, String con, String conBot, LocalDateTime reg_dtm) {
         this.id = id;
         this.mem_id = mem_id;
         this.title = title;
         this.con = con;
+        this.conBot = conBot;
         this.reg_dtm = reg_dtm;
     }
 }
