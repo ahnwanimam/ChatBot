@@ -13,6 +13,7 @@ export default function ChatLog() {
     .then( data => {console.log(data); setChatlogs(data)});
 
   }, []);
+
   
 
   

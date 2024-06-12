@@ -52,32 +52,36 @@ export default function AddMem () {
     <div className={styles.container}>
       <form className={styles.form}>
         <h2>회원가입</h2>
+        아이디
         <div className={styles.inputGroup}>
-        아이디: <input
+         <input
             type="text"
             ref = {idRef}
             required
             className={styles.input}
           />
         </div>
+        비밀번호
         <div className={styles.inputGroup}>
-          비밀번호: <input
+           <input
             type="password"
             ref = {pwRef}
             required
             className={styles.input}
           />
         </div>
+        이름
         <div className={styles.inputGroup}>
-        이름: <input
+         <input
             type="text"
             ref = {nameRef}
             required
             className={styles.input}
           />
         </div>
+        이메일
         <div className={styles.inputGroup}>
-        이메일: <input
+         <input
             type="text"
             ref = {mailRef}
             required
