@@ -1,34 +1,3 @@
-.button {
-  display: inline-block;
-  padding: 5px 20px;
-  font-size: 25px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  color: #ffffff;
-  background-color: #28a745;
-  border: 1px solid #28a745;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.button:hover {
-  background-color: #218838;
-}
-
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3);
-}
-
-.button:active {
-  background-color: #218838;
-  border-color: #218838;
-}
-
 .left {
   flex: 1;
   border: 1px solid #ccc;
@@ -118,7 +87,7 @@ input {
 
 .headBtn {
   position: absolute;
-  left: 49%;
+  left: 51%;
 }
 .Mem {
   display: inline-block;

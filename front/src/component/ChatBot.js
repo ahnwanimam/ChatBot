@@ -1,6 +1,9 @@
 import styles from './ChatBot.module.css';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import SvgIcon from '@mui/material/SvgIcon';
 
 export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
@@ -47,14 +50,27 @@ export default function ChatBot( ) {
     setMessages([]);
   }
 
+  function HomeIcon(props) {
     return (
-        <div className={styles.body}>
-          <div class={styles.logo}>
-            <Link to={"/"}><h1>서경챗봇</h1></Link>
+      <SvgIcon {...props}>
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+      </SvgIcon>
+    );
+  }
+
+
+    return (
+        <div>
+          <div className={styles.logo}>
+            <Typography variant="h2" gutterBottom>
+              <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
+            </Typography>
           </div>
           <div className={styles.headBtn}>
-            <Link to={"/Login" }><button className={styles.button}>로그인</button></Link>
-            <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
+            <Link to={"/Login" }>
+              <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}}>로그인</Button>
+            </Link>
+            <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={removeMessage}>지우기</Button>
           </div>
           <div className={styles.wrap}>
             <div className={styles.left}></div>
@@ -77,9 +93,9 @@ export default function ChatBot( ) {
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="내용을 입력하세요."
             />
-            <button className={styles.button} onClick={handleSendMessage}>전송</button>
+              <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={handleSendMessage}>전송</Button>
             <div className={styles.question}>
-              <button onClick={popUp} className={styles.button}>질문 요청</button>
+              <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={popUp}>질문요청</Button>
             </div>
           </div>
         </div>
