@@ -48,7 +48,9 @@ export default function AddMem () {
 
   return (
     <body>
-     <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <div class={styles.logo}>
+        <Link to={"/"}><h1>서경챗봇</h1></Link>
+      </div>
     <div className={styles.container}>
       <form className={styles.form}>
         <h2>회원가입</h2>

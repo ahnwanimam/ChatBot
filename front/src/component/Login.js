@@ -38,17 +38,15 @@ export default function Login () {
 
   return (
     <body>
-        <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <div class={styles.logo}>
+        <Link to={"/"}><h1>서경챗봇</h1></Link>
+      </div>
     <div className={styles.container}>
       <form className={styles.form}>
         <h2>로그인</h2>
         아이디
         <div className={styles.inputGroup}>
-<<<<<<< Updated upstream
            <input
-=======
-         <input
->>>>>>> Stashed changes
             type="text"
             ref = {idRef}
             required
@@ -64,10 +62,10 @@ export default function Login () {
             className={styles.input}
           />
         </div>
-        <div className={styles.btn}>
+        <div className={styles.signInBtn}>
             <button onClick={loginMem} className={styles.button}>로그인</button>
         </div>
-            <div className={styles.btn}> 
+            <div className={styles.signUpBtn}> 
         <Link to={"/AddMem"}><button className={styles.button}>회원가입</button></Link>
         </div>
       </form>

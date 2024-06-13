@@ -30,7 +30,7 @@ public interface ChatMapper {
     @Select("select * from chatlog where mem_id = #{mem_id}")
     ArrayList<ChatLog> findByMemId(String mem_id);
 
-    @Insert("insert into chatlog (mem_id, title, con) values (#{mem_id}, #{title}, #{con})")
+    @Insert("insert into chatlog (mem_id, title, con, conBot) values (#{mem_id}, #{title}, #{con}, #{conBot})")
     int addChatLog(ChatLog chatLog);
 
     @Select("select * from chatlog where id =#{id} ")

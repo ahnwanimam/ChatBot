@@ -26,13 +26,8 @@ app.add_middleware(
 
 # 모델과 데이터를 전역 변수로 불러오기
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
-<<<<<<< Updated upstream
 skchat_final_embedding_data = torch.load('C:\Skuniv\workspace\ChatBot\model\SKChat_final_embedding_data_tensor.pt')
 skchatdata = pd.read_csv("C:\Skuniv\workspace\ChatBot\model\SK_finalData.csv")
-=======
-skchat_final_embedding_data = torch.load("C:\SK\workspace\new2\ChatBot\model\SKChat_final_embedding_data_tensor.pt")
-skchatdata = pd.read_csv("C:\SK\workspace\new2\ChatBot\model\SK_finalData.csv")
->>>>>>> Stashed changes
 
 @app.get("/model")
 async def question(question: str = Query(..., description="The question to the chatbot")):
