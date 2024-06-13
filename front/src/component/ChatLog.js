@@ -18,19 +18,17 @@ export default function ChatLog() {
             });
     }, [id]);
 
-    // chatlogs.con과 chatlogs.conBot을 줄바꿈 기준으로 분할
-    const conArray = (chatlogs.con || "").split('\n');
-    const conBotArray = (chatlogs.conBot || "").split('\n');
 
-    // 두 배열의 길이를 고려하여 번갈아가며 출력할 요소 생성
+    const conArray = (chatlogs.con || "").split('\t');
+    const conBotArray = (chatlogs.conBot || "").split('\t');
+
+
     const combinedLogs = [];
-    for (let i = 0; i < Math.max(conArray.length, conBotArray.length); i++) {
-        if (i < conArray.length) {
-            combinedLogs.push(<p key={`con-${i}`}>{conArray[i]}</p>);
-        }
-        if (i < conBotArray.length) {
-            combinedLogs.push(<p key={`conBot-${i}`}>{conBotArray[i]}</p>);
-        }
+    for (let i = 0; i < conArray.length; i++) {
+        combinedLogs.push(<p key={`con-${i}`}>{conArray[i]}</p>);
+        combinedLogs.push(<p key={`con-${i}.join('\n')`}></p>);
+        combinedLogs.push(<p key={`conBot-${i}`}>{conBotArray[i]}</p>);
+        combinedLogs.push(<p key={`conBot-${i}.join('\n')`}></p>);
     }
 
     return (

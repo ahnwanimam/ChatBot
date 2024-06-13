@@ -73,8 +73,8 @@ export default function ChatBot() {
     const bodyString = JSON.stringify({
       "mem_id": Mem.mem_id,
       "title": saveMessages.length > 0 ? saveMessages[0].replace('나: ', '') : 'Untitled',
-      "con": saveMessages.join('\n'),
-      "conBot": saveMessagesBot.join('\n')
+      "con": saveMessages.join('\t'),
+      "conBot": saveMessagesBot.join('\t')
     });
 
     fetch(`/chatlogs`, {
