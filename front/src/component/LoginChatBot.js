@@ -67,12 +67,44 @@ export default function ChatBot() {
     setMessages([]);
   }
 
+  function deleteChatlog(id) {
+    fetch(`/chatlogs/${id}`, {
+      method: 'DELETE'
+    })
+        .then(response => {
+          if (response.ok) {
+            setChatlogs(prevChatlogs => prevChatlogs.filter(chatlog => chatlog.id !== id));
+            console.log(`해당 채팅 이력이 삭제되었습니다.`);
+          } else {
+            console.error(`해당 채팅 이력이 삭제되지 않았습니다.`);
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting chatlog:', error);
+        });
+  }
+
+
   function saveMessage(event) {
     event.preventDefault();
 
+    // 메시지 배열이 비어 있는지 확인
+    if (messages.length === 0) {
+      alert('저장할 대화가 없습니다.');
+      return;
+    }
+
+    let title;
+    const firstMessage = messages[0].replace(/^나: /, '');
+    if (firstMessage.length > 30) {
+      title = firstMessage.substring(0, 30);
+    } else {
+      title = firstMessage;
+    }
+
     const bodyString = JSON.stringify({
       "mem_id": Mem.mem_id,
-      "title": saveMessages.length > 0 ? saveMessages[0].replace('나: ', '') : 'Untitled',
+      "title": title,
       "con": saveMessages.join('\t'),
       "conBot": saveMessagesBot.join('\t')
     });
@@ -111,11 +143,14 @@ export default function ChatBot() {
           <div className={styles.left}>
             <table>
               <tbody>
-              {chatlogs.map((chatlog) => (
+              {chatlogs.map(chatlog => (
                   <tr key={chatlog.id}>
-                    <button onClick={() => window.open("ChatLog/" + (chatlog.id), "_blank", "width=400, height=400, top=150, left=500")}>{chatlog.id}. {chatlog.title}</button>
-                    <br></br>
-                    <br></br>
+                    <td>
+                      <button onClick={() => window.open(`ChatLog/${chatlog.id}`, "_blank", "width=400, height=400, top=150, left=500")}>{chatlog.title}</button>
+                    </td>
+                    <td>
+                      <button onClick={() => deleteChatlog(chatlog.id)}>X</button>
+                    </td>
                   </tr>
               ))}
               </tbody>

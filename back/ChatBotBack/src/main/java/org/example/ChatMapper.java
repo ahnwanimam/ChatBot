@@ -1,5 +1,6 @@
 package org.example;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -35,4 +36,7 @@ public interface ChatMapper {
 
     @Select("select * from chatlog where id =#{id} ")
     ChatLog findByChatLogId(int id);
+
+    @Delete("delete from chatlog where id =#{id} ")
+    void deleteById(int id);
 }

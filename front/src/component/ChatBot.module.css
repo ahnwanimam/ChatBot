@@ -42,7 +42,7 @@
 .mid {
   display: flex;
   flex-direction: column-reverse;
-  justify-content: space-between;
+  justify-content: flex-start; /* 메시지가 위쪽부터 쌓이도록 설정 */
   width: 500px;
   height: 500px;
   border: 1px solid #ccc;
@@ -50,32 +50,45 @@
   padding: 10px;
   margin: 0 auto;
   margin-top: 50px;
-  overflow: auto;
+  overflow: auto; /* 스크롤 가능 */
+  gap: 10px; /* 메시지 간격 */
   background-color: palegreen;
 }
 
+/* 메시지 컨테이너 스타일 */
 .messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 사용자 메시지 스타일 */
+.user {
+  background-color: #e0ffe0; /* 사용자 메시지 배경색 */
+  align-self: flex-end; /* 오른쪽 정렬 */
+  text-align: right; /* 텍스트 오른쪽 정렬 */
+  display: inline-block; /* 메시지 길이에 따라 자동으로 크기 조정 */
+  max-width: 60%; /* 최대 너비 설정 */
+  padding: 10px;
+  border-radius: 10px;
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
+}
+
+/* 챗봇 메시지 스타일 */
+.bot {
+  background-color: #f0f0f0; /* 챗봇 메시지 배경색 */
+  align-self: flex-start; /* 왼쪽 정렬 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  display: inline-block; /* 메시지 길이에 따라 자동으로 크기 조정 */
+  max-width: 60%; /* 최대 너비 설정 */
+  padding: 10px;
+  border-radius: 10px;
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
 }
 
 .message {
   padding: 10px;
   border-bottom: 1px solid #eee;
-}
-
-.user {
-  text-align: right;
-  background-color: #e0ffe0;
-  align-self: flex-end; /* 오른쪽 정렬 */
-}
-
-.bot {
-  text-align: left;
-  background-color: #f0f0f0;
-  align-self: flex-start; /* 왼쪽 정렬 */
 }
 
 .input-container {

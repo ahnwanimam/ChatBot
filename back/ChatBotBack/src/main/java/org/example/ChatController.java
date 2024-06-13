@@ -101,5 +101,16 @@ public class ChatController {
         return chatService.findChatLogById(id);
     }
 
+    @DeleteMapping("/chatlogsid/{id}")
+    public ResponseEntity<String> deleteChatlog(@PathVariable int id) {
+        try {
+            chatService.deleteChatlogById(id);
+            return ResponseEntity.ok("채팅 로그가 삭제되었습니다.");
+        } catch (Exception e) {
+            System.out.println("채팅 로그 삭제 중 오류가 발생하였습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("채팅 로그 삭제 중 오류가 발생하였습니다.");
+        }
+    }
 }
 

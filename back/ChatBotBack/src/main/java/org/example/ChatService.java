@@ -56,4 +56,8 @@ public class ChatService {
         return chatMapper.findByChatLogId(id);
     }
 
+    public void deleteChatlogById(int id) {
+        chatMapper.deleteById(id);
+    }
+
 }
