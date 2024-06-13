@@ -12,6 +12,10 @@ public class ChatLogAddDto {
     private String mem_id;
     private String title;
     private String con;
+<<<<<<< HEAD
+=======
+    private String conBot;
+>>>>>>> Deokhwan
     private LocalDateTime reg_dtm;
 
     public ChatLog toEntity() {
@@ -19,6 +23,10 @@ public class ChatLogAddDto {
                 .mem_id(mem_id)
                 .title(title)
                 .con(con)
+<<<<<<< HEAD
+=======
+                .conBot(conBot)
+>>>>>>> Deokhwan
                 .build();
     }
 

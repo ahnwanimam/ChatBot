@@ -1,6 +1,9 @@
 import React, { useRef } from 'react';
 import styles from './AddMem.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import SvgIcon from '@mui/material/SvgIcon';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 export default function AddMem () {
 
@@ -45,39 +48,57 @@ export default function AddMem () {
     })
   }
 
+  function HomeIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+      </SvgIcon>
+    );
+  }
+
 
   return (
     <body>
-     <Link to={"/"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+      <div className={styles.logo}>
+        <Typography variant="h2" gutterBottom>
+          <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
+        </Typography>
+      </div>
     <div className={styles.container}>
       <form className={styles.form}>
-        <h2>회원가입</h2>
+        <Typography variant="h5" gutterBottom sx={{textAlign: 'center'}}>
+          회원가입
+        </Typography>
+        아이디
         <div className={styles.inputGroup}>
-        아이디: <input
+         <input
             type="text"
             ref = {idRef}
             required
             className={styles.input}
           />
         </div>
+        비밀번호
         <div className={styles.inputGroup}>
-          비밀번호: <input
+           <input
             type="password"
             ref = {pwRef}
             required
             className={styles.input}
           />
         </div>
+        이름
         <div className={styles.inputGroup}>
-        이름: <input
+         <input
             type="text"
             ref = {nameRef}
             required
             className={styles.input}
           />
         </div>
+        이메일
         <div className={styles.inputGroup}>
-        이메일: <input
+         <input
             type="text"
             ref = {mailRef}
             required
@@ -85,7 +106,7 @@ export default function AddMem () {
           />
         </div>
         <div className={styles.btn}> 
-        <button onClick={addMem} className={styles.button}>회원가입</button>
+        <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={addMem}>회원가입</Button>
         </div>
       </form>
     </div>

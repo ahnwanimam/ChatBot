@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(originPatterns = "*")
@@ -82,11 +83,19 @@ public class ChatController {
     }
 
     @GetMapping("/chatlogs/{mem_id}")
+<<<<<<< HEAD
     ResponseEntity<ChatLogDto> findChatLogById(@PathVariable String mem_id) {
         ChatLog chatlog = chatService.findChatLogById(mem_id);
         return ResponseEntity.ok()
                 .body(new ChatLogDto(chatlog));
     }
+=======
+    ArrayList<ChatLog> findChatLogBymemId(@PathVariable String mem_id) {
+
+        return chatService.findChatLogByMemId(mem_id);
+    }
+
+>>>>>>> Deokhwan
     @PostMapping("/chatlogs")
     public ResponseEntity addChatLog(@RequestBody ChatLogAddDto request) {
         int add = chatService.addChatLog(request);
@@ -95,5 +104,13 @@ public class ChatController {
                 .body(add);
     }
 
+<<<<<<< HEAD
+=======
+    @GetMapping("/chatlogsid/{id}")
+    ChatLog findChatLogById(@PathVariable int id) {
+        return chatService.findChatLogById(id);
+    }
+
+>>>>>>> Deokhwan
 }
 

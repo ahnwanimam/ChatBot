@@ -10,6 +10,10 @@ public class ChatLogDto {
     private String mem_id;
     private String title;
     private String con;
+<<<<<<< HEAD
+=======
+    private String conBot;
+>>>>>>> Deokhwan
     private LocalDateTime reg_dtm;
 
     public ChatLogDto(ChatLog chatLog) {
@@ -17,6 +21,10 @@ public class ChatLogDto {
         this.mem_id = chatLog.getMem_id();
         this.title = chatLog.getTitle();
         this.con = chatLog.getCon();
+<<<<<<< HEAD
+=======
+        this.conBot = chatLog.getConBot();
+>>>>>>> Deokhwan
         this.reg_dtm = chatLog.getReg_dtm();
     }
 }
