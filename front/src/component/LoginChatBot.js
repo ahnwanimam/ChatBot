@@ -174,7 +174,6 @@ function HomeIcon(props) {
           </div>
           <div className={styles.mid}>
             <div className={styles.messages}>
-            <div className={styles.messages}>
                 {messages.map((msg, index) => (
                     <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
@@ -184,7 +183,6 @@ function HomeIcon(props) {
                       </div>
                     </div>
                 ))}
-              </div>
             </div>
           </div>
           <div className={styles.right}></div>

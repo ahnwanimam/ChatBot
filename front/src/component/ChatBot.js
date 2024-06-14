@@ -17,8 +17,11 @@ export default function ChatBot( ) {
 
   const handleSendMessage = async () => {
     if (input.trim() !== '') {
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newMessage = `나: ${input}`;
+
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [...prevMessages, `나: ${input}`]);
+      setMessages((prevMessages) => [...prevMessages, { text: newMessage, timestamp: currentTime }]);
 
       // FastAPI 서버에 요청 보내기
       try {
@@ -28,11 +31,14 @@ export default function ChatBot( ) {
         }
         const data = await response.json();
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
-        // 챗봇 메시지 추가
-        setMessages((prevMessages) => [...prevMessages, `챗봇: ${botMessage}`]);
+
+        // 챗봇 메시지를 추가
+        const botNewMessage = `챗봇: ${botMessage}`;
+        setMessages((prevMessages) => [...prevMessages, { text: botNewMessage, timestamp: currentTime }]);
       } catch (error) {
         console.error("Error fetching data: ", error);
-        setMessages((prevMessages) => [...prevMessages, '챗봇: Error fetching data']);
+        const errorMessage = `챗봇: Error fetching data`;
+        setMessages((prevMessages) => [...prevMessages, { text: errorMessage, timestamp: currentTime }]);
       }
 
       // 입력 필드 초기화
@@ -75,13 +81,17 @@ export default function ChatBot( ) {
           <div className={styles.wrap}>
             <div className={styles.left}></div>
             <div className={styles.mid}>
-              <div className={styles.messages}>
+            <div className={styles.messages}>
                 {messages.map((msg, index) => (
-                    <div key={index} className={msg.startsWith("나:") ? styles.user : styles.bot}>
-                      {msg}
+                    <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
+                      <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
+                      <div>
+                        {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                        <div className={styles.timestamp}>{msg.timestamp}</div>
+                      </div>
                     </div>
                 ))}
-              </div>
+            </div>
             </div>
             <div className={styles.right}></div>
           </div>
