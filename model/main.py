@@ -26,8 +26,8 @@ app.add_middleware(
 
 # 모델과 데이터를 전역 변수로 불러오기
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
-skchat_final_embedding_data = torch.load('C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\SKChat_final_embedding_data_tensor.pt')
-skchatdata = pd.read_csv("C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\SK_finalData.csv")
+skchat_final_embedding_data = torch.load('C:\Skuniv\workspace\ChatBot\model\SKChat_final_embedding_data_tensor.pt')
+skchatdata = pd.read_csv("C:\Skuniv\workspace\ChatBot\model\SK_finalData.csv")
 
 @app.get("/model")
 async def question(question: str = Query(..., description="The question to the chatbot")):

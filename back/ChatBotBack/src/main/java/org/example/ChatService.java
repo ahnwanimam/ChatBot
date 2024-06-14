@@ -56,8 +56,8 @@ public class ChatService {
         return chatMapper.findByChatLogId(id);
     }
 
-    public void deleteChatlogById(int id) {
-        chatMapper.deleteById(id);
+    public int updateByMemId(ChatLogAddDto request) {
+        return chatMapper.updateByMemId(request.toEntitiy());
     }
 
 }

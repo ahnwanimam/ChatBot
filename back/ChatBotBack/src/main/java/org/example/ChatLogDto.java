@@ -2,6 +2,7 @@ package org.example;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,7 +12,8 @@ public class ChatLogDto {
     private String title;
     private String con;
     private String conBot;
-    private LocalDateTime reg_dtm;
+    private int isDeleted;
+    private LocalDate reg_dtm;
 
     public ChatLogDto(ChatLog chatLog) {
         this.id = chatLog.getId();
@@ -19,6 +21,7 @@ public class ChatLogDto {
         this.title = chatLog.getTitle();
         this.con = chatLog.getCon();
         this.conBot = chatLog.getConBot();
+        this.isDeleted = chatLog.getIsDeleted();
         this.reg_dtm = chatLog.getReg_dtm();
     }
 }

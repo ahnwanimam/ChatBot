@@ -1,6 +1,9 @@
 import styles from './LoginChatBot.module.css';
 import React, { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import SvgIcon from '@mui/material/SvgIcon';
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
@@ -8,6 +11,7 @@ export default function ChatBot() {
 
   const [chatlogs, setChatlogs] = useState([]);
   const [Mem, setMem] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`/member`)
@@ -71,23 +75,6 @@ export default function ChatBot() {
     setMessages([]);
   }
 
-  function deleteChatlog(id) {
-    fetch(`/chatlogs/${id}`, {
-      method: 'DELETE'
-    })
-        .then(response => {
-          if (response.ok) {
-            setChatlogs(prevChatlogs => prevChatlogs.filter(chatlog => chatlog.id !== id));
-            console.log(`해당 채팅 이력이 삭제되었습니다.`);
-          } else {
-            console.error(`해당 채팅 이력이 삭제되지 않았습니다.`);
-          }
-        })
-        .catch(error => {
-          console.error('Error deleting chatlog:', error);
-        });
-  }
-
   function saveMessage(event) {
     event.preventDefault();
 
@@ -133,33 +120,60 @@ export default function ChatBot() {
     });
   }
 
+  function logout () {
+    fetch(`/logout`)
+    .then( res => {
+        if (res.ok) {
+            alert("로그아웃 되었습니다.");
+            navigate("/");
+        }
+    }
+)
+}
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
+
   return (
       <div className={styles.body}>
-        <Link to={"/LoginMain"}><h1 className={styles.logo}>서경챗봇</h1></Link>
+          <div className={styles.logo}>
+            <Typography variant="h2" gutterBottom>
+              <HomeIcon sx={{ fontSize: 60 }} />서경챗봇
+            </Typography>
+          </div>
+        <div class={styles.Mem}>
+          <Typography variant="h6" gutterBottom>
+            안녕하세요, {Mem.mem_nm}님!
+          </Typography>
+        </div>
         <div className={styles.headBtn}>
-          <button className={styles.button} id={styles.saveBtn} onClick={saveMessage}>저장</button>
-          <button className={styles.button} id={styles.removeBtn} onClick={removeMessage}>지우기</button>
+          <button onClick={logout} class={styles.logoutBtn}>로그아웃</button>
+          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={saveMessage}>저장</Button>
+          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={removeMessage}>지우기</Button>
         </div>
         <div className={styles.wrap}>
           <div className={styles.left}>
+            <Typography variant="h6" gutterBottom sx={{textAlign:'center'}}>
+              채팅 기록
+            </Typography>
             <table>
               <tbody>
-              {chatlogs.map(chatlog => (
+              {chatlogs.map((chatlog) => (
                   <tr key={chatlog.id}>
-                    <td>
-                      <button onClick={() => window.open(`ChatLog/${chatlog.id}`, "_blank", "width=400, height=400, top=150, left=500")}>{chatlog.title}</button>
-                    </td>
-                    <td>
-                      <button onClick={() => deleteChatlog(chatlog.id)}>X</button>
-                    </td>
+                    <Button variant='text' size='large' sx={{color: 'green'}} onClick={() => window.open("ChatLog/" + (chatlog.id), "_blank", "width=700, height=400, top=150, left=400")}>{chatlog.title} - {chatlog.reg_dtm}</Button>
+                    <br></br>
+                    <br></br>
                   </tr>
               ))}
               </tbody>
             </table>
           </div>
           <div className={styles.mid}>
-            <div>
-              <div className={styles.messages}>
+            <div className={styles.messages}>
                 {messages.map((msg, index) => (
                     <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
@@ -169,7 +183,6 @@ export default function ChatBot() {
                       </div>
                     </div>
                 ))}
-              </div>
             </div>
           </div>
           <div className={styles.right}></div>
@@ -182,9 +195,9 @@ export default function ChatBot() {
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="내용을 입력하세요."
           />
-          <button className={styles.button} onClick={handleSendMessage}>전송</button>
+          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={handleSendMessage}>전송</Button>
           <div className={styles.question}>
-            <button onClick={popUp} className={styles.button}>질문 요청</button>
+          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={popUp}>질문요청</Button>
           </div>
         </div>
       </div>
