@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import SvgIcon from '@mui/material/SvgIcon';
 
 export default function ChatLog() {
     const [chatlogs, setChatlogs] = useState({ con: "", conBot: "" });
@@ -31,10 +34,43 @@ export default function ChatLog() {
         combinedLogs.push(<p key={`conBot-${i}.join('\n')`}></p>);
     }
 
+    function deleteChatlog (event) {
+        event.preventDefault();
+
+        const bodyString = JSON.stringify({
+            "isDeleted" : 1
+          })
+
+
+          fetch(`/chatlogsid/${id}`,
+            {
+                  method : "PUT",
+                  headers : {
+                    'Content-Type' : "application/json",
+                  },
+                  body : bodyString
+            }).then(res => {
+              console.log(res);
+              if(res.ok) {
+                console.log(res);
+                alert("삭제 완료.");
+                window.close();
+              } else {
+                alert('삭제 실패')
+              }
+            }
+            ).catch(() => {
+              console.log('error');
+            })
+          }
+
+
+
     return (
         <div className="form-container">
             <h2>대화 내용</h2>
             {combinedLogs}
+            {/*<Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={deleteChatlog}>삭제</Button>*/}
         </div>
     );
 }

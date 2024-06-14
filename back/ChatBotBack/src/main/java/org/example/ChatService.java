@@ -56,4 +56,8 @@ public class ChatService {
         return chatMapper.findByChatLogId(id);
     }
 
+    public int updateByMemId(ChatLogAddDto request) {
+        return chatMapper.updateByMemId(request.toEntitiy());
+    }
+
 }

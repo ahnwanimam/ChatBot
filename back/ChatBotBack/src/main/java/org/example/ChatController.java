@@ -101,5 +101,13 @@ public class ChatController {
         return chatService.findChatLogById(id);
     }
 
+    @PutMapping("/chatlogsid/{id}")
+    public ResponseEntity updateByMemId(@RequestBody ChatLogAddDto request) {
+        int dele = chatService.updateByMemId(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(dele);
+    }
+
 }
 
