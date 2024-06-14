@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const saveMessages = messages.filter((msg) => msg.startsWith("나:"));
-  const saveMessagesBot = messages.filter((msg) => msg.startsWith("챗봇:"));
 
   const [chatlogs, setChatlogs] = useState([]);
   const [Mem, setMem] = useState([]);
@@ -34,8 +32,11 @@ export default function ChatBot() {
 
   const handleSendMessage = async () => {
     if (input.trim() !== '') {
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newMessage = `나: ${input}`;
+
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [...prevMessages, `나: ${input}`]);
+      setMessages((prevMessages) => [...prevMessages, { text: newMessage, timestamp: currentTime }]);
 
       // FastAPI 서버에 요청 보내기
       try {
@@ -45,11 +46,14 @@ export default function ChatBot() {
         }
         const data = await response.json();
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
-        // 챗봇 메시지 추가
-        setMessages((prevMessages) => [...prevMessages, `챗봇: ${botMessage}`]);
+
+        // 챗봇 메시지를 추가
+        const botNewMessage = `챗봇: ${botMessage}`;
+        setMessages((prevMessages) => [...prevMessages, { text: botNewMessage, timestamp: currentTime }]);
       } catch (error) {
         console.error("Error fetching data: ", error);
-        setMessages((prevMessages) => [...prevMessages, '챗봇: Error fetching data']);
+        const errorMessage = `챗봇: Error fetching data`;
+        setMessages((prevMessages) => [...prevMessages, { text: errorMessage, timestamp: currentTime }]);
       }
 
       // 입력 필드 초기화
@@ -84,7 +88,6 @@ export default function ChatBot() {
         });
   }
 
-
   function saveMessage(event) {
     event.preventDefault();
 
@@ -95,7 +98,7 @@ export default function ChatBot() {
     }
 
     let title;
-    const firstMessage = messages[0].replace(/^나: /, '');
+    const firstMessage = messages[0].text.replace(/^나: /, '');
     if (firstMessage.length > 30) {
       title = firstMessage.substring(0, 30);
     } else {
@@ -105,8 +108,8 @@ export default function ChatBot() {
     const bodyString = JSON.stringify({
       "mem_id": Mem.mem_id,
       "title": title,
-      "con": saveMessages.join('\t'),
-      "conBot": saveMessagesBot.join('\t')
+      "con": messages.filter(msg => msg.text.startsWith("나:")).map(msg => `${msg.text} (${msg.timestamp})`).join('\t'),
+      "conBot": messages.filter(msg => msg.text.startsWith("챗봇:")).map(msg => `${msg.text} (${msg.timestamp})`).join('\t')
     });
 
     fetch(`/chatlogs`, {
@@ -116,9 +119,7 @@ export default function ChatBot() {
       },
       body: bodyString
     }).then(res => {
-      console.log(res);
       if (res.ok) {
-        console.log(res);
         alert("대화를 저장하였습니다.");
         setMessages([]);
         fetch(`/chatlogs/${Mem.mem_id}`)
@@ -157,12 +158,18 @@ export default function ChatBot() {
             </table>
           </div>
           <div className={styles.mid}>
-            <div className={styles.messages}>
-              {messages.map((msg, index) => (
-                  <div key={index} className={msg.startsWith("나:") ? styles.user : styles.bot}>
-                    {msg}
-                  </div>
-              ))}
+            <div>
+              <div className={styles.messages}>
+                {messages.map((msg, index) => (
+                    <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
+                      <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
+                      <div>
+                        {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                        <div className={styles.timestamp}>{msg.timestamp}</div>
+                      </div>
+                    </div>
+                ))}
+              </div>
             </div>
           </div>
           <div className={styles.right}></div>
