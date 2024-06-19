@@ -13,8 +13,7 @@ export default function Login () {
   const pwRef = useRef(0);
 
 
-  function loginMem(event) {
-    event.preventDefault();
+  function loginMem() {
 
     const bodyString = JSON.stringify({
       "memId" : idRef.current.value,
@@ -75,6 +74,7 @@ export default function Login () {
             type="password"
             ref = {pwRef}
             required
+            onKeyPress={(e) => e.key === 'Enter' && loginMem()}
             className={styles.input}
           />
         </div>
