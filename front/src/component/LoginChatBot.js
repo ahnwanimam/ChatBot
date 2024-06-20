@@ -40,63 +40,34 @@ export default function ChatBot() {
       const newMessage = `나: ${input}`;
 
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [...prevMessages, { text: newMessage, timestamp: currentTime }]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: newMessage, timestamp: currentTime }
+      ]);
 
       // FastAPI 서버에 요청 보내기
       try {
-        const response = await fetch(`http://localhost:8000/model?question=${input}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+        const data = await fetchResponse(`http://localhost:8000/model?question=${encodeURIComponent(input)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
         // 챗봇 메시지를 추가
         const botNewMessage = `챗봇: ${botMessage}`;
-        setMessages((prevMessages) => [...prevMessages, { text: botNewMessage, timestamp: currentTime }]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
 
         // 비슷한 질문 확인 후 사용자 응답을 기다림
-        if (data.answer && data.answer.includes("그렇다면")) {
-          // 사용자 응답을 기다린 후 추가 요청 보내기
-          const userResponse = prompt("예 또는 아니오로 응답해주세요."); // 간단한 프롬프트로 사용자 응답 받기
-
-          if (userResponse) {
-            const response2 = await fetch(`http://localhost:8000/response?user_response=${userResponse}`);
-            if (!response2.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const data2 = await response2.json();
-            const botMessage2 = data2.answer ? data2.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
-
-            // 챗봇의 두 번째 응답 추가
-            const botNewMessage2 = `챗봇: ${botMessage2}`;
-            setMessages((prevMessages) => [...prevMessages, { text: botNewMessage2, timestamp: currentTime }]);
-
-            // 세 번째 응답 확인
-            if (data2.answer && data2.answer.includes("혹시")) {
-              const userSecResponse = prompt("예 또는 아니오로 응답해주세요.");
-
-              if (userSecResponse) {
-                const response3 = await fetch(`http://localhost:8000/secResponse?user_secResponse=${userSecResponse}`);
-                if (!response3.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                const data3 = await response3.json();
-                const botMessage3 = data3.answer ? data3.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
-
-                // 챗봇의 세 번째 응답 추가
-                const botNewMessage3 = `챗봇: ${botMessage3}`;
-                setMessages((prevMessages) => [...prevMessages, { text: botNewMessage3, timestamp: currentTime }]);
-
-              }
-            }
-          }
+        if (data.answer.includes("혹시")) {
+          setTimeout(() => handleUserResponse("response"), 0);
         }
-
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: Error fetching data`;
-        setMessages((prevMessages) => [...prevMessages, { text: errorMessage, timestamp: currentTime }]);
+        const errorMessage = `챗봇: 데이터 가져오기 오류`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: errorMessage, timestamp: currentTime }
+        ]);
       }
 
       // 입력 필드 초기화
@@ -104,6 +75,52 @@ export default function ChatBot() {
       setInput('');
     }
   };
+
+  const handleUserResponse = async (endpoint) => {
+    const userResponse = prompt("예 또는 아니오로 응답해주세요.");
+
+    if (userResponse) {
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newMessage = `나: ${userResponse}`;
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: newMessage, timestamp: currentTime }
+      ]);
+
+      try {
+        const data = await fetchResponse(`http://localhost:8000/${endpoint}?user_response=${encodeURIComponent(userResponse)}`);
+        const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
+
+        // 챗봇의 응답 추가
+        const botNewMessage = `챗봇: ${botMessage}`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
+
+        // 추가 질문 확인
+        if (data.answer.includes("그렇다면")) {
+          setTimeout(() => handleUserResponse("secResponse"), 0);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        const errorMessage = `챗봇: 데이터 가져오기 오류`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: errorMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
+      }
+    }
+  };
+
+  const fetchResponse = async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  };
+
 
   function popUp() {
     const url = "Question";

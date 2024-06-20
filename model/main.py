@@ -63,10 +63,10 @@ async def question(question: str = Query(..., description="The question to the c
     sk_cos_score = np.dot(question_encode_tensor, sk_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(sk_Query_similar_encode))
     gen_cos_score = np.dot(question_encode_tensor, gen_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(gen_Query_similar_encode))
 
-    if (sk_cos_score >= 0.88):
+    if (sk_cos_score >= 0.85):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         return {"answer" : sk_Answer}
-    elif (sk_cos_score < 0.88 and sk_cos_score >= 0.6):
+    elif (sk_cos_score < 0.85 and sk_cos_score >= 0.6):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         state['answer'] = sk_Answer
         state['sk_cos_score'] = sk_cos_score
@@ -77,7 +77,7 @@ async def question(question: str = Query(..., description="The question to the c
         gen_Answer = genChatData['A'][genChat_simliar_idx]
         return {"answer" : gen_Answer}
     else:
-        return {"answer" : "질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다."}
+        return {"answer" : "질문을 정확하게 이해하지 못했습니다.\n좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다."}
 
 
 @app.get("/response")
@@ -104,16 +104,17 @@ async def user_response(user_response: str = Query(..., description="User's resp
         if (sk_sec_cos_score >= 0.6):
             lastState['sk_sec_Answer'] = sk_sec_Answer
             return {"answer" : f"그렇다면 궁금하신 내용이 \"{sk_sec_Query_similar}\"에 대한 내용이 맞나요?"}
-
+        else:
+            return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않거나 답할 수 없는 질문입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
 
 @app.get("/secResponse")
-async def user_secResponse(user_secResponse: str = Query(..., description="User's response to the chatbot")):
-    if 'sk_sec_Answer' not in lastState or 'sk_sec_cos_score' not in lastState or 'sk_sec_similar' not in lastState:
+async def user_secResponse(user_response: str = Query(..., description="User's response to the chatbot")):
+    if 'sk_sec_Answer' not in lastState:
         raise HTTPException(status_code=400, detail="No answer in progress")
 
-    if user_secResponse == '예':
+    if user_response == '예':
         # '예' 응답 처리 로직
         return {"answer": {lastState['sk_sec_Answer']}}
 
-    elif user_secResponse == '아니오':
-        return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않는 내용입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
+    elif user_response == '아니오':
+        return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않거나 답할 수 없는 질문입니다. \n[질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
