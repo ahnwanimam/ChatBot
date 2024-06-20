@@ -1,0 +1,12 @@
+.group {
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(101, 222, 143);
+    padding: 10% 10%;
+    margin-bottom: 10%;
+}
+form {
+    text-align: center;
+}

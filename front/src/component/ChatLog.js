@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
+import styles from './ChatLog.module.css';
 
 export default function ChatLog() {
     const [chatlogs, setChatlogs] = useState({ con: "", conBot: "" });
@@ -33,6 +32,7 @@ export default function ChatLog() {
         combinedLogs.push(<p key={`conBot-${i}`}>{conBotArray[i]}</p>);
         combinedLogs.push(<p key={`conBot-${i}.join('\n')`}></p>);
     }
+    console.log(combinedLogs);
 
     function deleteChatlog (event) {
         event.preventDefault();
@@ -70,7 +70,7 @@ export default function ChatLog() {
         <div className="form-container">
             <h2>대화 내용</h2>
             {combinedLogs}
-            {/*<Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={deleteChatlog}>삭제</Button>*/}
+            <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={deleteChatlog}>삭제</Button>
         </div>
     );
 }

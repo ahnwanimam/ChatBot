@@ -1,0 +1,71 @@
+.mid {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    width: 500px;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
+    margin-top: 50px;
+    overflow: auto;
+    gap: 10px;
+    background-color: palegreen;
+  }
+  /* 메시지 컨테이너 스타일 */
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  
+  .user, .bot {
+    position: relative; /* 아이콘의 절대 위치를 조정할 기준이 되게 함 */
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 5px; /* 텍스트와 시간 사이의 간격 */
+    max-width: 60%; /* 최대 너비 설정 */
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word; /* 긴 단어 줄바꿈 */
+  }
+  
+  .user {
+    background-color: #e0ffe0; /* 사용자 메시지 배경색 */
+    align-self: flex-end; /* 오른쪽 정렬 */
+    text-align: right; /* 텍스트 오른쪽 정렬 */
+  }
+  
+  
+  .bot {
+    background-color: #f0f0f0; /* 챗봇 메시지 배경색 */
+    align-self: flex-start; /* 왼쪽 정렬 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+  }
+  .userIcon, .botIcon {
+    position: absolute; /* 절대 위치 설정 */
+    top: -20px; /* 메시지 박스 위로 나가게 조정 */
+    /*left: -35px; /* 메시지 박스 왼쪽으로 나가게 조정 */
+    background-size: cover; /* 이미지가 요소를 덮도록 설정 */
+    width: 30px; /* 원하는 크기로 설정 */
+    height: 30px; /* 원하는 크기로 설정 */
+    border-radius: 50%; /* 원형 이미지 */
+  }
+  .userIcon {
+    align-items: 'center';
+    right: 0; /* 오른쪽 끝으로 정렬 */
+    background-image: url("./Images/user.png");
+  }
+  
+  .botIcon {
+    align-items: 'center';
+    left: 0; /* 왼쪽 끝으로 정렬 */
+    background-image: url("./Images/bot.png");
+  }
+  
+  .timestamp {
+    font-size: 12px; /* 작은 글씨 크기 */
+    color: #666; /* 회색으로 설정 */
+  }
