@@ -54,6 +54,45 @@ export default function ChatBot() {
         // 챗봇 메시지를 추가
         const botNewMessage = `챗봇: ${botMessage}`;
         setMessages((prevMessages) => [...prevMessages, { text: botNewMessage, timestamp: currentTime }]);
+
+        // 비슷한 질문 확인 후 사용자 응답을 기다림
+        if (data.answer && data.answer.includes("그렇다면")) {
+          // 사용자 응답을 기다린 후 추가 요청 보내기
+          const userResponse = prompt("예 또는 아니오로 응답해주세요."); // 간단한 프롬프트로 사용자 응답 받기
+
+          if (userResponse) {
+            const response2 = await fetch(`http://localhost:8000/response?user_response=${userResponse}`);
+            if (!response2.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const data2 = await response2.json();
+            const botMessage2 = data2.answer ? data2.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
+
+            // 챗봇의 두 번째 응답 추가
+            const botNewMessage2 = `챗봇: ${botMessage2}`;
+            setMessages((prevMessages) => [...prevMessages, { text: botNewMessage2, timestamp: currentTime }]);
+
+            // 세 번째 응답 확인
+            if (data2.answer && data2.answer.includes("혹시")) {
+              const userSecResponse = prompt("예 또는 아니오로 응답해주세요.");
+
+              if (userSecResponse) {
+                const response3 = await fetch(`http://localhost:8000/secResponse?user_secResponse=${userSecResponse}`);
+                if (!response3.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                const data3 = await response3.json();
+                const botMessage3 = data3.answer ? data3.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
+
+                // 챗봇의 세 번째 응답 추가
+                const botNewMessage3 = `챗봇: ${botMessage3}`;
+                setMessages((prevMessages) => [...prevMessages, { text: botNewMessage3, timestamp: currentTime }]);
+
+              }
+            }
+          }
+        }
+
       } catch (error) {
         console.error("Error fetching data: ", error);
         const errorMessage = `챗봇: Error fetching data`;
@@ -142,7 +181,7 @@ function HomeIcon(props) {
       <div className={styles.body}>
           <div className={styles.logo}>
             <Typography variant="h2" gutterBottom>
-              <HomeIcon sx={{ fontSize: 60 }} />서경챗봇
+              <Link to={"/Login"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
             </Typography>
           </div>
         <div class={styles.Mem}>

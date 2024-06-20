@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer, util
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 # 개발자 모드로 인한 에러를 방지하기 위한 조치
@@ -26,8 +26,14 @@ app.add_middleware(
 
 # 모델과 데이터를 전역 변수로 불러오기
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
-skchat_final_embedding_data = torch.load('C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\SKChat_final_embedding_data_tensor.pt')
-skchatdata = pd.read_csv("C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\SK_finalData.csv")
+sk_embedding_data = torch.load('C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\sk_embedding_data_tensor.pt')
+skChatData = pd.read_excel("C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\SKChatData.xlsx")
+gen_embedding_data = torch.load('C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\gen_embedding_data_tensor.pt')
+genChatData = pd.read_csv("C:\\Users\\a\\Desktop\\NLP\\QnA_pt\\gen_ChatData.csv")
+
+# 사용자 응답에 따른 질문과 답변을 저장
+state = {}
+lastState = {}
 
 @app.get("/model")
 async def question(question: str = Query(..., description="The question to the chatbot")):
@@ -36,21 +42,78 @@ async def question(question: str = Query(..., description="The question to the c
     question_encode_np = np.array(question_encode, dtype=np.float32)
     question_encode_tensor = torch.tensor(question_encode_np)
 
-    # 저장된 임베딩 데이터와 예시 질문의 코사인 유사도 측정
-    cos_similar = util.cos_sim(question_encode_tensor, skchat_final_embedding_data)
+    # 저장된 임베딩 데이터와 예시 질문의 코사인 유사도가 비슷한 텐서값
+    # sk_embedding_data / gen_embedding_data
+    sk_cos_similar = util.cos_sim(question_encode_tensor, sk_embedding_data)
+    gen_cos_similar = util.cos_sim(question_encode_tensor, gen_embedding_data)
 
-    # 코사인 유사도가 높은 선택된 질문
-    Chat_simliar_idx = int(np.argmax(cos_similar))
-    Query_similar = skchatdata['Q'][Chat_simliar_idx]
+    # 서경챗봇 코사인 유사도가 높은 인덱스값과 질문(skChatData)
+    skChat_simliar_idx = int(np.argmax(sk_cos_similar))
+    sk_Query_similar = skChatData['Q'][skChat_simliar_idx]
+    # 일반챗봇 코사인 유사도가 높은 인덱스값과 질문(genChatData)
+    genChat_simliar_idx = int(np.argmax(gen_cos_similar))
+    gen_Query_similar = genChatData['Q'][genChat_simliar_idx]
 
-    # 유사도가 높아 선택된 질문 인코딩
-    Query_similar_encode = model.encode(Query_similar)
+    # 서경챗봇 유사도가 높아 선택된 질문 인코딩
+    sk_Query_similar_encode = model.encode(sk_Query_similar)
+    # 일반챗봇 유사도가 높아 선택된 질문 인코딩
+    gen_Query_similar_encode = model.encode(gen_Query_similar)
 
-    # 유사도 점수 측정
-    cos_score = np.dot(question_encode_tensor, Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(Query_similar_encode))
+    # 챗봇 유사도 점수 측정
+    sk_cos_score = np.dot(question_encode_tensor, sk_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(sk_Query_similar_encode))
+    gen_cos_score = np.dot(question_encode_tensor, gen_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(gen_Query_similar_encode))
 
-    if cos_score < 0.7:
-        return {"message": f"질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다."}
+    if (sk_cos_score >= 0.88):
+        sk_Answer = skChatData['A'][skChat_simliar_idx]
+        return {"answer" : sk_Answer}
+    elif (sk_cos_score < 0.88 and sk_cos_score >= 0.6):
+        sk_Answer = skChatData['A'][skChat_simliar_idx]
+        state['answer'] = sk_Answer
+        state['sk_cos_score'] = sk_cos_score
+        state['sk_cos_similar'] = sk_cos_similar
+        state['question_encode_tensor'] = question_encode_tensor
+        return {"answer" : f"혹시 궁금하신 내용이 \"{sk_Query_similar}\"에 대한 내용이 맞나요?"}
+    elif (sk_cos_score < 0.65 and gen_cos_score >= 0.6):
+        gen_Answer = genChatData['A'][genChat_simliar_idx]
+        return {"answer" : gen_Answer}
     else:
-        answer = skchatdata['A'][Chat_simliar_idx]
-        return {"answer": answer}
+        return {"answer" : "질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다."}
+
+
+@app.get("/response")
+async def user_response(user_response: str = Query(..., description="User's response to the chatbot")):
+    if 'answer' not in state or 'sk_cos_score' not in state or 'sk_cos_similar' not in state or 'question_encode_tensor' not in state:
+        raise HTTPException(status_code=400, detail="No answer in progress")
+
+    if user_response == '예':
+        # '예' 응답 처리 로직
+        return {"answer": {state['answer']}}
+
+    elif user_response == '아니오':
+        # '아니오' 응답 처리 로직
+        sk_sec_similar = state['sk_cos_score'] - 0.14
+        # 두번째로 높은 코사인 유사도에 해당하는 인덱스 찾기
+        skChat_sec_simliar_idx = int(np.argmax(state['sk_cos_similar'] >= sk_sec_similar))
+        sk_sec_Query_similar = skChatData['Q'][skChat_sec_simliar_idx]
+
+        # 서경챗봇 유사도가 두번째로 높아 선택된 질문 인코딩
+        sk_Query_sec_similar_encode = model.encode(sk_sec_Query_similar)
+        sk_sec_cos_score = np.dot(state['question_encode_tensor'], sk_Query_sec_similar_encode) / (np.linalg.norm(state['question_encode_tensor']) * np.linalg.norm(sk_Query_sec_similar_encode))
+        # 두번쩨 답변
+        sk_sec_Answer = skChatData['A'][skChat_sec_simliar_idx]
+        if (sk_sec_cos_score >= 0.6):
+            lastState['sk_sec_Answer'] = sk_sec_Answer
+            return {"answer" : f"그렇다면 궁금하신 내용이 \"{sk_sec_Query_similar}\"에 대한 내용이 맞나요?"}
+
+
+@app.get("/secResponse")
+async def user_secResponse(user_secResponse: str = Query(..., description="User's response to the chatbot")):
+    if 'sk_sec_Answer' not in lastState or 'sk_sec_cos_score' not in lastState or 'sk_sec_similar' not in lastState:
+        raise HTTPException(status_code=400, detail="No answer in progress")
+
+    if user_secResponse == '예':
+        # '예' 응답 처리 로직
+        return {"answer": {lastState['sk_sec_Answer']}}
+
+    elif user_secResponse == '아니오':
+        return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않는 내용입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
