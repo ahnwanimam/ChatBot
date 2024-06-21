@@ -40,24 +40,31 @@ export default function ChatBot() {
       const newMessage = `나: ${input}`;
 
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [...prevMessages, { text: newMessage, timestamp: currentTime }]);
+      setMessages((prevMessages) => [ ...prevMessages, { text: newMessage, timestamp: currentTime }  ]);
 
       // FastAPI 서버에 요청 보내기
       try {
-        const response = await fetch(`http://localhost:8000/model?question=${input}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+        const data = await fetchResponse(`http://localhost:8000/model?question=${encodeURIComponent(input)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
         // 챗봇 메시지를 추가
         const botNewMessage = `챗봇: ${botMessage}`;
-        setMessages((prevMessages) => [...prevMessages, { text: botNewMessage, timestamp: currentTime }]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
+
+        // 비슷한 질문 확인 후 사용자 응답을 기다림
+        if (data.answer.includes("혹시")) {
+          setTimeout(() => handleUserResponse("response"), 2);
+        }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: Error fetching data`;
-        setMessages((prevMessages) => [...prevMessages, { text: errorMessage, timestamp: currentTime }]);
+        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: errorMessage, timestamp: currentTime }
+        ]);
       }
 
       // 입력 필드 초기화
@@ -66,6 +73,50 @@ export default function ChatBot() {
     }
   };
 
+  const handleUserResponse = async (endpoint) => {
+    const userResponse = prompt("예 또는 아니오로 응답해주세요.");
+
+    if (userResponse) {
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const newMessage = `나: ${userResponse}`;
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: newMessage, timestamp: currentTime }
+      ]);
+
+      try {
+        const data = await fetchResponse(`http://localhost:8000/${endpoint}?user_response=${encodeURIComponent(userResponse)}`);
+        const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
+
+        // 챗봇의 응답 추가
+        const botNewMessage = `챗봇: ${botMessage}`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
+
+        // 추가 질문 확인
+        if (data.answer.includes("그렇다면")) {
+          setTimeout(() => handleUserResponse("secResponse"), 2);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: errorMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        ]);
+      }
+    }
+  };
+
+  const fetchResponse = async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  };
   function popUp() {
     const url = "Question";
     window.open(url, "_blank", "width=600, height=400, top=200, left=450");
@@ -138,6 +189,7 @@ function HomeIcon(props) {
   );
 }
 
+
   return (
       <div className={styles.body}>
           <div className={styles.logo}>
@@ -192,7 +244,7 @@ function HomeIcon(props) {
                   <br></br>
                   <br></br>궁금한 내용이 있다면 물어보세요!
               </div>
-                {messages.map((msg, index) => (
+                {messages && messages.map((msg, index) => (
                     <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
                       <div>
