@@ -40,10 +40,7 @@ export default function ChatBot() {
       const newMessage = `나: ${input}`;
 
       // 사용자 메시지를 추가
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: newMessage, timestamp: currentTime }
-      ]);
+      setMessages((prevMessages) => [ ...prevMessages, { text: newMessage, timestamp: currentTime }  ]);
 
       // FastAPI 서버에 요청 보내기
       try {
@@ -59,11 +56,11 @@ export default function ChatBot() {
 
         // 비슷한 질문 확인 후 사용자 응답을 기다림
         if (data.answer.includes("혹시")) {
-          setTimeout(() => handleUserResponse("response"), 0);
+          setTimeout(() => handleUserResponse("response"), 2);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 데이터 가져오기 오류`;
+        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: currentTime }
@@ -100,11 +97,11 @@ export default function ChatBot() {
 
         // 추가 질문 확인
         if (data.answer.includes("그렇다면")) {
-          setTimeout(() => handleUserResponse("secResponse"), 0);
+          setTimeout(() => handleUserResponse("secResponse"), 2);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 데이터 가져오기 오류`;
+        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }

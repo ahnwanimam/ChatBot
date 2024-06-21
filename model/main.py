@@ -63,17 +63,17 @@ async def question(question: str = Query(..., description="The question to the c
     sk_cos_score = np.dot(question_encode_tensor, sk_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(sk_Query_similar_encode))
     gen_cos_score = np.dot(question_encode_tensor, gen_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(gen_Query_similar_encode))
 
-    if (sk_cos_score >= 0.85):
+    if (sk_cos_score >= 0.82):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         return {"answer" : sk_Answer}
-    elif (sk_cos_score < 0.85 and sk_cos_score >= 0.6):
+    elif (sk_cos_score < 0.82 and sk_cos_score >= 0.62):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         state['answer'] = sk_Answer
         state['sk_cos_score'] = sk_cos_score
         state['sk_cos_similar'] = sk_cos_similar
         state['question_encode_tensor'] = question_encode_tensor
         return {"answer" : f"혹시 궁금하신 내용이 \"{sk_Query_similar}\"에 대한 내용이 맞나요?"}
-    elif (sk_cos_score < 0.65 and gen_cos_score >= 0.6):
+    elif (sk_cos_score < 0.62 and gen_cos_score >= 0.6):
         gen_Answer = genChatData['A'][genChat_simliar_idx]
         return {"answer" : gen_Answer}
     else:
@@ -101,11 +101,14 @@ async def user_response(user_response: str = Query(..., description="User's resp
         sk_sec_cos_score = np.dot(state['question_encode_tensor'], sk_Query_sec_similar_encode) / (np.linalg.norm(state['question_encode_tensor']) * np.linalg.norm(sk_Query_sec_similar_encode))
         # 두번쩨 답변
         sk_sec_Answer = skChatData['A'][skChat_sec_simliar_idx]
-        if (sk_sec_cos_score >= 0.6):
+        if (sk_sec_cos_score >= 0.62):
             lastState['sk_sec_Answer'] = sk_sec_Answer
             return {"answer" : f"그렇다면 궁금하신 내용이 \"{sk_sec_Query_similar}\"에 대한 내용이 맞나요?"}
         else:
-            return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않거나 답할 수 없는 질문입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
+            return {"answer" : "제가 제공하는 내용 중 해당하지 않거나 구체적이지 않은, 혹은 답할 수 없는 질문입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
+
+    elif user_response != '예' and user_response != '아니오':
+        return {"answer" : "예 또는 아니오 로만 응답해주세요."}
 
 @app.get("/secResponse")
 async def user_secResponse(user_response: str = Query(..., description="User's response to the chatbot")):
@@ -117,4 +120,7 @@ async def user_secResponse(user_response: str = Query(..., description="User's r
         return {"answer": {lastState['sk_sec_Answer']}}
 
     elif user_response == '아니오':
-        return {"answer" : "제가 제공하는 [학교 시설의 위치 및 이동 경로/동아리 종류/학과별 졸업조건 및 취업 진로 방향] 중에 해당하지 않거나 답할 수 없는 질문입니다. \n[질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
+        return {"answer" : "제가 제공하는 내용 중 해당하지 않거나 구체적이지 않은, 혹은 답할 수 없는 질문입니다. [질문 요청하기] 버튼을 통해 원하는 질문을 알려주세요."}
+
+    elif user_response != '예' and user_response != '아니오':
+        return {"answer" : "예 또는 아니오 로만 응답해주세요."}
