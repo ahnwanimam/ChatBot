@@ -2,6 +2,7 @@ package org.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,13 @@ public class ChatService {
         return chatMapper.findByChatLogId(id);
     }
 
-    public int updateByMemId(ChatLogAddDto request) {
-        return chatMapper.updateByMemId(request.toEntitiy());
+    @Transactional
+    public int updateByMemId(int id, ChatLogUpdate request) {
+        ChatLog chatLog = chatMapper.findByChatLogId(id);
+        chatLog.setIsDeleted(request.getIsDeleted());
+
+        int updateCnt = chatMapper.updateByMemId(chatLog);
+        return updateCnt;
     }
 
 }

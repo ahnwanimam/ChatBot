@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer, util
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 # 개발자 모드로 인한 에러를 방지하기 위한 조치

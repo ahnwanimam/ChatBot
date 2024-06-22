@@ -1,9 +1,10 @@
 import styles from './ChatBot.module.css';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import SvgIcon from '@mui/material/SvgIcon';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
@@ -117,6 +118,17 @@ export default function ChatBot( ) {
   }
 
 
+/* useEffect(() => {
+    
+    // 1초 뒤에 로딩 완료
+   setTimeout(function () {
+      document.getElementsByClassName("loading")[messages.length].style.display = "none";
+      document.getElementsByClassName("botload")[messages.length].style.display = "flex";
+    }, 1000);
+}, [messages]);*/
+
+
+
     return (
         <div>
           <div className={styles.logo}>
@@ -134,14 +146,35 @@ export default function ChatBot( ) {
             <div className={styles.left}></div>
             <div className={styles.mid}>
             <div className={styles.messages}>
+              <div className={styles.botHello}>
+                <div className={styles.botIcon}></div>
+                  저는 서경챗봇입니다. 
+                  <br></br>
+                  <br></br>
+                  제가 제공하는 내용은 
+                  <br></br>
+                  1. 학교 시설의 위치 및 이동경로
+                  <br></br>
+                  <br></br> 
+                  2. 동아리 종류 
+                  <br></br>
+                  <br></br>
+                  3. 학과별 졸업요건 및 취업 진로 방향 
+                  <br></br>입니다. 
+                  <br></br>
+                  <br></br>궁금한 내용이 있다면 물어보세요!
+              </div>
                 {messages.map((msg, index) => (
                     <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
                       <div>
-                        {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                        <span className={msg.text.startsWith("나:") ? styles.userload : styles.botload}>
+                          {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                        </span>
+                        {msg.text.startsWith("나:") ? null : null}
                         <div className={styles.timestamp}>{msg.timestamp}</div>
                       </div>
-                    </div>
+                    </div>                    
                 ))}
             </div>
             </div>
