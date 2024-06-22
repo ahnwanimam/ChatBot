@@ -63,10 +63,10 @@ async def question(question: str = Query(..., description="The question to the c
     sk_cos_score = np.dot(question_encode_tensor, sk_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(sk_Query_similar_encode))
     gen_cos_score = np.dot(question_encode_tensor, gen_Query_similar_encode) / (np.linalg.norm(question_encode_tensor) * np.linalg.norm(gen_Query_similar_encode))
 
-    if (sk_cos_score >= 0.82):
+    if (sk_cos_score >= 0.84):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         return {"answer" : sk_Answer}
-    elif (sk_cos_score < 0.82 and sk_cos_score >= 0.62):
+    elif (sk_cos_score < 0.84 and sk_cos_score >= 0.62):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         state['answer'] = sk_Answer
         state['sk_cos_score'] = sk_cos_score
