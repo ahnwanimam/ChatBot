@@ -29,8 +29,8 @@ export default function ChatBot( ) {
         const data = await fetchResponse(`http://localhost:8000/model?question=${encodeURIComponent(input)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
-        // 챗봇 메시지를 추가
-        const botNewMessage = `챗봇: ${botMessage}`;
+        // 서경챗봇 메시지를 추가
+        const botNewMessage = `서경챗봇: ${botMessage}`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -38,11 +38,11 @@ export default function ChatBot( ) {
 
         // 비슷한 질문 확인 후 사용자 응답을 기다림
         if (data.answer.includes("혹시")) {
-          setTimeout(() => handleUserResponse("response"), 2);
+          setTimeout(() => handleUserResponse("response"), 3);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        const errorMessage = `서경챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: currentTime }
@@ -70,8 +70,8 @@ export default function ChatBot( ) {
         const data = await fetchResponse(`http://localhost:8000/${endpoint}?user_response=${encodeURIComponent(userResponse)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
-        // 챗봇의 응답 추가
-        const botNewMessage = `챗봇: ${botMessage}`;
+        // 서경챗봇의 응답 추가
+        const botNewMessage = `서경챗봇: ${botMessage}`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -79,11 +79,11 @@ export default function ChatBot( ) {
 
         // 추가 질문 확인
         if (data.answer.includes("그렇다면")) {
-          setTimeout(() => handleUserResponse("secResponse"), 2);
+          setTimeout(() => handleUserResponse("secResponse"), 3);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        const errorMessage = `서경챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -132,11 +132,8 @@ export default function ChatBot( ) {
     return (
         <div>
           <div className={styles.logo}>
-            <Typography variant="h2" gutterBottom>
-              <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
-            </Typography>
           </div>
-          <div className={styles.headBtn}>
+          <div className={styles.headBtn} style={{ marginTop: '5px' }}>
             <Link to={"/Login" }>
               <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}}>로그인</Button>
             </Link>
@@ -169,7 +166,7 @@ export default function ChatBot( ) {
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
                       <div>
                         <span className={msg.text.startsWith("나:") ? styles.userload : styles.botload}>
-                          {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                          {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("서경챗봇:", "")}
                         </span>
                         {msg.text.startsWith("나:") ? null : null}
                         <div className={styles.timestamp}>{msg.timestamp}</div>

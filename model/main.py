@@ -66,14 +66,14 @@ async def question(question: str = Query(..., description="The question to the c
     if (sk_cos_score >= 0.84):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         return {"answer" : sk_Answer}
-    elif (sk_cos_score < 0.84 and sk_cos_score >= 0.62):
+    elif (sk_cos_score < 0.84 and sk_cos_score >= 0.635):
         sk_Answer = skChatData['A'][skChat_simliar_idx]
         state['answer'] = sk_Answer
         state['sk_cos_score'] = sk_cos_score
         state['sk_cos_similar'] = sk_cos_similar
         state['question_encode_tensor'] = question_encode_tensor
         return {"answer" : f"혹시 궁금하신 내용이 \"{sk_Query_similar}\"에 대한 내용이 맞나요?"}
-    elif (sk_cos_score < 0.62 and gen_cos_score >= 0.6):
+    elif (sk_cos_score < 0.635 and gen_cos_score >= 0.635):
         gen_Answer = genChatData['A'][genChat_simliar_idx]
         return {"answer" : gen_Answer}
     else:
@@ -101,7 +101,7 @@ async def user_response(user_response: str = Query(..., description="User's resp
         sk_sec_cos_score = np.dot(state['question_encode_tensor'], sk_Query_sec_similar_encode) / (np.linalg.norm(state['question_encode_tensor']) * np.linalg.norm(sk_Query_sec_similar_encode))
         # 두번쩨 답변
         sk_sec_Answer = skChatData['A'][skChat_sec_simliar_idx]
-        if (sk_sec_cos_score >= 0.62):
+        if (sk_sec_cos_score >= 0.635):
             lastState['sk_sec_Answer'] = sk_sec_Answer
             return {"answer" : f"그렇다면 궁금하신 내용이 \"{sk_sec_Query_similar}\"에 대한 내용이 맞나요?"}
         else:

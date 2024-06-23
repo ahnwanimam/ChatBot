@@ -47,8 +47,8 @@ export default function ChatBot() {
         const data = await fetchResponse(`http://localhost:8000/model?question=${encodeURIComponent(input)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
-        // 챗봇 메시지를 추가
-        const botNewMessage = `챗봇: ${botMessage}`;
+        // 서경챗봇 메시지를 추가
+        const botNewMessage = `서경챗봇: ${botMessage}`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -56,11 +56,11 @@ export default function ChatBot() {
 
         // 비슷한 질문 확인 후 사용자 응답을 기다림
         if (data.answer.includes("혹시")) {
-          setTimeout(() => handleUserResponse("response"), 2);
+          setTimeout(() => handleUserResponse("response"), 3);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        const errorMessage = `서경챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: currentTime }
@@ -88,8 +88,8 @@ export default function ChatBot() {
         const data = await fetchResponse(`http://localhost:8000/${endpoint}?user_response=${encodeURIComponent(userResponse)}`);
         const botMessage = data.answer ? data.answer : '질문을 정확하게 이해하지 못했습니다. 좀 더 자세하게 설명해주신다면 원하시는 답변을 찾아드리겠습니다.';
 
-        // 챗봇의 응답 추가
-        const botNewMessage = `챗봇: ${botMessage}`;
+        // 서경챗봇의 응답 추가
+        const botNewMessage = `서경챗봇: ${botMessage}`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: botNewMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -97,11 +97,11 @@ export default function ChatBot() {
 
         // 추가 질문 확인
         if (data.answer.includes("그렇다면")) {
-          setTimeout(() => handleUserResponse("secResponse"), 2);
+          setTimeout(() => handleUserResponse("secResponse"), 3);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
-        const errorMessage = `챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
+        const errorMessage = `서경챗봇: 답변을 할 수 없는 오류가 생겼습니다.`;
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: errorMessage, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -147,7 +147,7 @@ export default function ChatBot() {
       "mem_id": Mem.mem_id,
       "title": title,
       "con": messages.filter(msg => msg.text.startsWith("나:")).map(msg => `${msg.text} (${msg.timestamp})`).join('\t'),
-      "conBot": messages.filter(msg => msg.text.startsWith("챗봇:")).map(msg => `${msg.text} (${msg.timestamp})`).join('\t')
+      "conBot": messages.filter(msg => msg.text.startsWith("서경챗봇:")).map(msg => `${msg.text} (${msg.timestamp})`).join('\t')
     });
 
     fetch(`/chatlogs`, {
@@ -193,30 +193,32 @@ function HomeIcon(props) {
   return (
       <div className={styles.body}>
           <div className={styles.logo}>
-            <Typography variant="h2" gutterBottom>
-              <HomeIcon sx={{ fontSize: 60 }} />서경챗봇
+          </div>
+        <div style={{marginTop: '5px'}}>
+          <div className={styles.Mem}>
+            <Typography variant="h6" gutterBottom>
+              안녕하세요, {Mem.mem_nm}님!
             </Typography>
           </div>
-        <div class={styles.Mem}>
-          <Typography variant="h6" gutterBottom>
-            안녕하세요, {Mem.mem_nm}님!
-          </Typography>
-        </div>
-        <div className={styles.headBtn}>
-          <button onClick={logout} class={styles.logoutBtn}>로그아웃</button>
-          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={saveMessage}>저장</Button>
-          <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={removeMessage}>지우기</Button>
+          <div className={styles.headBtn}>
+            <button onClick={logout} className={styles.logoutBtn}>로그아웃</button>
+            <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green', marginLeft: '20px'}}
+                    onClick={saveMessage}>저장</Button>
+            <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green', marginLeft: '20px'}}
+                    onClick={removeMessage}>지우기</Button>
+          </div>
         </div>
         <div className={styles.wrap}>
           <div className={styles.left}>
-            <Typography variant="h6" gutterBottom sx={{textAlign:'center'}}>
+            <Typography variant="h6" gutterBottom sx={{textAlign: 'center'}}>
               채팅 기록
             </Typography>
             <table>
               <tbody>
               {chatlogs.map((chatlog) => (
                   <tr key={chatlog.id}>
-                    <Button variant='text' size='large' sx={{color: 'green'}} onClick={() => window.open("ChatLog/" + (chatlog.id), "_blank", "width=700, height=400, top=150, left=400")}>{chatlog.title} - {chatlog.reg_dtm}</Button>
+                    <Button variant='text' size='large' sx={{color: 'green'}}
+                            onClick={() => window.open("ChatLog/" + (chatlog.id), "_blank", "width=700, height=400, top=150, left=400")}>{chatlog.title} - {chatlog.reg_dtm}</Button>
                     <br></br>
                     <br></br>
                   </tr>
@@ -248,7 +250,7 @@ function HomeIcon(props) {
                     <div key={index} className={msg.text.startsWith("나:") ? styles.user : styles.bot}>
                       <div className={msg.text.startsWith("나:") ? styles.userIcon : styles.botIcon}></div>
                       <div>
-                        {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("챗봇:", "")}
+                        {msg.text.startsWith("나:") ? msg.text.replace("나:", "") : msg.text.replace("서경챗봇:", "")}
                         <div className={styles.timestamp}>{msg.timestamp}</div>
                       </div>
                     </div>
