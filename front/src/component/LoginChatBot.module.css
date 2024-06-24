@@ -129,6 +129,7 @@ input {
   background-repeat: no-repeat; /* 배경 이미지 반복하지 않음 */
   width: 100%;
   height: 90px; /* 높이를 적절히 조정 */
+  transform: translateX(-50px); /* 중앙에서 왼쪽으로 5px 이동 */
 }
 
 .body {

@@ -132,6 +132,7 @@ export default function ChatBot( ) {
     return (
         <div>
           <div className={styles.logo}>
+            <Link to="/" className={styles.link}></Link>
           </div>
           <div className={styles.headBtn} style={{ marginTop: '5px' }}>
             <Link to={"/Login" }>

@@ -194,14 +194,14 @@ function HomeIcon(props) {
       <div className={styles.body}>
           <div className={styles.logo}>
           </div>
-        <div style={{marginTop: '5px'}}>
+        <div style={{marginTop: '8px'}}>
           <div className={styles.Mem}>
             <Typography variant="h6" gutterBottom>
               안녕하세요, {Mem.mem_nm}님!
             </Typography>
           </div>
           <div className={styles.headBtn}>
-            <button onClick={logout} className={styles.logoutBtn}>로그아웃</button>
+            <button onClick={logout} className={styles.logoutBtn}>[로그아웃]</button>
             <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green', marginLeft: '20px'}}
                     onClick={saveMessage}>저장</Button>
             <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green', marginLeft: '20px'}}
