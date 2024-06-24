@@ -118,23 +118,13 @@ export default function ChatBot( ) {
   }
 
 
-/* useEffect(() => {
-    
-    // 1초 뒤에 로딩 완료
-   setTimeout(function () {
-      document.getElementsByClassName("loading")[messages.length].style.display = "none";
-      document.getElementsByClassName("botload")[messages.length].style.display = "flex";
-    }, 1000);
-}, [messages]);*/
 
 
 
     return (
         <div>
           <div className={styles.logo}>
-            <Typography variant="h2" gutterBottom>
-              <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
-            </Typography>
+          <Link to="/" className={styles.link}></Link>
           </div>
           <div className={styles.headBtn}>
             <Link to={"/Login" }>

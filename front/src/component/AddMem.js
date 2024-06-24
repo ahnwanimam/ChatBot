@@ -59,12 +59,10 @@ export default function AddMem () {
 
   return (
     <body>
-      <div className={styles.logo}>
-        <Typography variant="h2" gutterBottom>
-          <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
-        </Typography>
+      <div className={styles.logo} style={{marginTop: '100px'}}>
+        <Link to="/" className={styles.link}></Link>
       </div>
-    <div className={styles.container}>
+      <div className={styles.container} style={{marginTop: '30px'}} >
       <form className={styles.form}>
         <Typography variant="h5" gutterBottom sx={{textAlign: 'center'}}>
           회원가입
@@ -106,7 +104,7 @@ export default function AddMem () {
           />
         </div>
         <div className={styles.btn}> 
-        <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' , marginLeft: '20px'}} onClick={addMem}>회원가입</Button>
+        <Button variant="outlined" size='mid' sx={{color: 'green', borderColor: 'green' }} onClick={addMem}>회원가입</Button>
         </div>
       </form>
     </div>

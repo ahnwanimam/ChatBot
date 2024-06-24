@@ -50,12 +50,10 @@ export default function Login () {
 
   return (
     <body>
-      <div className={styles.logo}>
-            <Typography variant="h2" gutterBottom>
-              <Link to={"/"}><HomeIcon sx={{ fontSize: 60 }} /></Link>서경챗봇
-            </Typography>
+      <div className={styles.logo} style={{marginTop: '100px'}} >
+        <Link to="/" className={styles.link}></Link>
       </div>
-    <div className={styles.container}>
+      <div className={styles.container} style={{marginTop: '30px'}} >
       <form className={styles.form}>
         <Typography variant="h5" gutterBottom sx={{textAlign: 'center'}}>
           로그인
