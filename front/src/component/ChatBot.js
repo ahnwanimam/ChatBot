@@ -2,9 +2,6 @@ import styles from './ChatBot.module.css';
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
-import CircularProgress from '@mui/material/CircularProgress';
 
 export default function ChatBot( ) {
   const [messages, setMessages] = useState([]);
@@ -108,17 +105,6 @@ export default function ChatBot( ) {
   function removeMessage () {
     setMessages([]);
   }
-
-  function HomeIcon(props) {
-    return (
-      <SvgIcon {...props}>
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </SvgIcon>
-    );
-  }
-
-
-
 
 
     return (

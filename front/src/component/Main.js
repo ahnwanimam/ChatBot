@@ -1,18 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from './Main.module.css';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
 
 export default function Main() {
 
-    function HomeIcon(props) {
-        return (
-          <SvgIcon {...props}>
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-          </SvgIcon>
-        );
-      }
        
     return (
     <body>

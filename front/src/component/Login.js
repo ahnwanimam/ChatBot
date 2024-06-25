@@ -3,8 +3,6 @@ import styles from './Login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
-import TextField from '@mui/material/TextField';
 
 export default function Login () {
 
@@ -37,15 +35,6 @@ export default function Login () {
         }
       })
   }
-
-  function HomeIcon(props) {
-    return (
-      <SvgIcon {...props}>
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </SvgIcon>
-    );
-  }
-
 
 
   return (

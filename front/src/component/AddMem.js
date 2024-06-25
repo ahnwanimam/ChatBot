@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import styles from './AddMem.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
@@ -19,14 +18,15 @@ export default function AddMem () {
 
 
 
-    const bodyString = JSON.stringify({
+    const bodyString = JSON.stringify({   //회원가입창에 입력한 값을 json 형식으로 만든다.
       "memId" : idRef.current.value,
       "memPw" : pwRef.current.value,
       "memNm" : nameRef.current.value,
       "memMail" : mailRef.current.value
     })
 
-    fetch(`/members`,
+    //fetch 함수로 접근해 회원가입 창에서 입력한 값을 POST 매핑으로 백엔드 서버에 넘겨 DB에 등록.
+    fetch(`/members`,  
     {
           method : "POST",
           headers : {
@@ -48,13 +48,6 @@ export default function AddMem () {
     })
   }
 
-  function HomeIcon(props) {
-    return (
-      <SvgIcon {...props}>
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </SvgIcon>
-    );
-  }
 
 
   return (
